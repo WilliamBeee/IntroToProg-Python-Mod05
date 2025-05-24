@@ -47,6 +47,7 @@ finally:
     if file.closed == False:
         file.close()
 
+# Main Loop
 while True:
 
     print(MENU)
@@ -65,16 +66,16 @@ while True:
             if not student_last_name.isalpha():
                 raise ValueError("The last name should not contain numbers.")
 
-            try:
-                student_gpa = float(input("What is the student's GPA? "))
-            except ValueError:
-                raise ValueError("GPA must be a numeric value.")
+            course_name = input("What is the course name? ")
+            if not course_name:
+                raise ValueError("Course name cannot be empty.")
 
             # Save the data to the file
             student_data = {"FirstName": student_first_name,
                         "LastName": student_last_name,
-                        "GPA": student_gpa}
+                        "Course": course_name}
             students.append(student_data)
+            print(f"Student {student_first_name} {student_last_name} has registered for {course_name}")
         except ValueError as e:
             print(e)  # Prints the custom message
             print("-- Technical Error Message -- ")
@@ -87,23 +88,14 @@ while True:
 
     # Display the Tables Current Data
     elif menu_choice == "2":
-        # Process the data to create and display a custom message
-        print("-" * 50)
-        for student in students:
-            if student["GPA"] >= 4.0:
-                message = " {} {} earned an A with a {:.2f} GPA"
-            elif student["GPA"] >= 3.0:
-                message = " {} {} earned a B with a {:.2f} GPA"
-            elif student["GPA"] >= 2.0:
-                message = " {} {} earned a C with a {:.2f} GPA"
-            elif student["GPA"] >= 1.0:
-                message = " {} {} earned a D with a {:.2f} GPA"
-            else:
-                message = " {} {}'s {:.2f} GPA was not a passing grade"
-
-            print(message.format(student["FirstName"], student["LastName"], student["GPA"]))
-        print("-" * 50)
-        continue
+        # Show current data
+        if not students:
+            print("No registrations to display.")
+        else:
+            print("\nCurrent Student Registrations:")
+            for row in students:
+                print(f"{row['FirstName']}, {row['LastName']}, {row['Course']}")
+            print()
 
     # Dictionary Rows are Saved to a .json File + Error Handling
     elif menu_choice == "3":
@@ -129,5 +121,3 @@ while True:
         break
     else:
         print("Please enter a numerical value between 1-4. . . .")
-
-
